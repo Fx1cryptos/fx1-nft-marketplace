@@ -1,0 +1,6 @@
+git init
+git branch -M main
+git remote add origin https://github.com/fx1cryptos/fx1-nft-marketplace.git
+git add .
+git commit -m "FX1 NFT Marketplace on Base"
+git push -u origin main
