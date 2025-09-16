@@ -1,0 +1,54 @@
+{
+  "project": {
+    "name": "FX1 DIGITAL HUBS",
+    "description": "NFT Fashion Art & Onchain Identity platform built on Base blockchain",
+    "version": "1.0.0",
+    "author": "FX1 Digital Hubs Team",
+    "website": "https://fx1hubs.short.gy",
+    "blockchain": "Base",
+    "token": {
+      "name": "FX1 Digital Hubs Token",
+      "symbol": "$FDH",
+      "contract": "0x1f85705d939Bb6Fa1AEbE99d7105AdCee75CE380",
+      "network": "Base Mainnet",
+      "decimals": 18,
+      "totalSupply": "1000000000"
+    },
+    "nft": {
+      "collection": "FX1 Digital Fashion",
+      "maxSupply": 1000,
+      "mintPrice": "0.01",
+      "freeMintEnabled": true,
+      "contract": "0x92fc40720b3159d756ca7abba3b42d0d3607900d"
+    },
+    "social": {
+      "website": "https://fx1hubs.short.gy",
+      "farcaster": "https://farcaster.xyz/fx1-faucet",
+      "telegram": "https://t.me/fx1digitalhubs",
+      "twitter": "https://x.com/fx1_hubs?s=21",
+      "discord": "https://discord.gg/gAQFRfdu",
+      "tiktok": "https://www.tiktok.com/@fx1_hubs?_t=ZS-8z9q5FXQJjl&_r=1",
+      "zora": "https://zora.co/@fx1_hubs"
+    },
+    "features": [
+      "NFT Fashion Art",
+      "Onchain Identity",
+      "Digital Assets",
+      "Base Blockchain",
+      "Free & Paid Minting",
+      "Limited Supply Collections"
+    ],
+    "colors": {
+      "primary": "#4169E1",
+      "secondary": "#FFFFFF", 
+      "accent": "#FFD700",
+      "dark": "#000080"
+    },
+    "metadata": {
+      "created": "2025-01-27",
+      "lastUpdated": "2025-01-27",
+      "status": "active",
+      "category": "NFT Marketplace"
+    }
+  }
+}
