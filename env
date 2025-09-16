@@ -1,0 +1,7 @@
+BASE_MAINNET_RPC=https://base-mainnet.g.alchemy.com/v2/alcht_tAO3qEUeNfVauBbvvXIWaUxcBY5GKi
+BASE_SEPOLIA_RPC=https://sepolia.base.org
+PRIVATE_KEY=your_wallet_private_key
+BASESCAN_API_KEY=your_basescan_api_key
+FX1_NFT_ADDRESS=0x92fc40720b3159d756ca7abba3b42d0d3607900d
+MARKETPLACE_ADDRESS=0x92fc40720b3159d756ca7abba3b42d0d3607900d
+VITE_FX1_ADDRESS=0x92fc40720b3159d756ca7abba3b42d0d3607900d
