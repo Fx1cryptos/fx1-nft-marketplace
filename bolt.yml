@@ -1,0 +1,461 @@
+name: FX1 Digital Hubs - Roadmap & Scaffolding
+on:
+  push:
+    branches:
+      - main
+
+deploy:
+  repo: https://github.com/Fx1cryptos/fx1-nft-marketplace.git
+  branch: main
+  project_type: static
+  entrypoint: index.html
+  include:
+    - fx1-nft-marketplace-complete.zip
+    - interact-example.js
+
+steps:
+  - name: Unzip uploaded content (if present)
+    run: |
+      if [ -f fx1-nft-marketplace-complete.zip ]; then
+        unzip -o fx1-nft-marketplace-complete.zip -d ./
+      fi
+
+  - name: Ensure basic folders
+    run: |
+      mkdir -p css js pages assets runways
+
+  - name: Add / update main stylesheet (style.css)
+    run: |
+      cat > css/style.css <<'CSS'
+/* FX1 Digital Hubs - Base Theme */
+:root{
+  --royal:#4169e1;
+  --gold:#ffd700;
+  --navy:#000080;
+  --white:#ffffff;
+  --bg:#f8f8ff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:var(--white);
+  color:#111;
+  text-align:center;
+}
+header.site-header{
+  background: linear-gradient(90deg,var(--royal),var(--gold));
+  color:var(--white);
+  padding:18px 20px;
+}
+.site-nav{margin-top:8px;}
+.site-nav a{color:var(--white); margin:0 12px; text-decoration:none; font-weight:700}
+.hero{
+  padding:40px 20px;
+  background:linear-gradient(180deg, rgba(65,105,225,0.06), rgba(255,215,0,0.03));
+}
+.container{max-width:1200px;margin:0 auto;padding:20px;}
+.btn{
+  background: linear-gradient(90deg,var(--royal),var(--gold));
+  color:var(--white);
+  padding:12px 22px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-block;
+}
+.card{
+  border:2px solid var(--navy);
+  border-radius:12px;
+  background:var(--bg);
+  padding:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+}
+.nft-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:18px;
+  margin-top:24px;
+}
+.footer{
+  padding:20px;
+  border-top:1px solid #eee;
+  margin-top:40px;
+  color:#444;
+}
+.runway-strip{
+  display:flex;
+  gap:20px;
+  align-items:center;
+  padding:20px;
+  overflow:hidden;
+}
+.runway-card{
+  min-width:280px;
+  border-radius:12px;
+  overflow:hidden;
+  transition:transform .35s ease, box-shadow .35s ease;
+}
+.runway-card:hover{ transform: translateY(-8px) scale(1.03); box-shadow: 0 10px 30px rgba(0,0,0,0.18)}
+CSS
+
+  - name: Create index.html (adds nav to runway and marketplace)
+    run: |
+      cat > index.html <<'HTML'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>FX1 Digital Hubs</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/wallet-connect.js"></script>
+  <script defer src="js/nft-fetch.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>FX1 Digital Hubs</h1>
+      <nav class="site-nav">
+        <a href="/">Home</a>
+        <a href="/pages/marketplace.html">Marketplace</a>
+        <a href="/fashion-runway.html">Fashion Runway</a>
+        <a href="/pages/mint.html">Mint</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h2>Welcome to FX1 — Onchain Fashion & NFTs on Base</h2>
+      <p>Royal Blue • Gold • Navy Blue — curated runway drops & marketplace.</p>
+      <a class="btn" href="/fashion-runway.html">Enter the Runway</a>
+    </div>
+  </section>
+
+  <main class="container">
+    <section>
+      <h3>Latest Drops</h3>
+      <div id="nft-grid" class="nft-grid"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <small>© FX1 Digital Hubs</small>
+    </div>
+  </footer>
+</body>
+</html>
+HTML
+
+  - name: Create marketplace page (pages/marketplace.html)
+    run: |
+      mkdir -p pages
+      cat > pages/marketplace.html <<'HTML'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>FX1 Marketplace</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script defer src="/js/wallet-connect.js"></script>
+  <script defer src="/js/nft-fetch.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>FX1 Marketplace</h1>
+      <nav class="site-nav">
+        <a href="/">Home</a>
+        <a href="/fashion-runway.html">Fashion Runway</a>
+        <a href="/pages/mint.html">Mint</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>Browse NFTs</h2>
+    <p>Filters & search coming soon (phase 2).</p>
+    <div id="nft-grid" class="nft-grid"></div>
+  </main>
+</body>
+</html>
+HTML
+
+  - name: Create Mint page scaffold (pages/mint.html)
+    run: |
+      cat > pages/mint.html <<'HTML'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>FX1 Mint - Create NFT</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script defer src="/js/wallet-connect.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>Mint an NFT on Base</h1>
+      <nav class="site-nav"><a href="/">Home</a></nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h3>Mint (MVP)</h3>
+      <p>Upload + mint flow will be implemented with a relayer / Base contract in Phase 2.</p>
+      <p><em>Placeholder UI for minting</em></p>
+      <button class="btn" id="connect-wallet">Connect Wallet</button>
+    </section>
+  </main>
+</body>
+</html>
+HTML
+
+  - name: Create NFT fetcher (js/nft-fetch.js) - uses your addresses
+    run: |
+      mkdir -p js
+      cat > js/nft-fetch.js <<'JS'
+/* FX1 NFT Fetcher - OpenSea + Zora (static, client-side)
+   NOTE: OpenSea rate limits may apply. For production use, proxy via server or serverless function.
+*/
+const walletAddress = "0x17af2b27d43fa612aab0698214ef2c44b08845ee";
+const zoraContract = "0x9b889aa4f3da5e96ceab76a4e2be68137a03f29d";
+
+function createCard({img, name, collection, link}){
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.innerHTML = `
+    <div style="height:180px; overflow:hidden;">
+      <img src="${img || '/assets/placeholder.png'}" alt="${name||'NFT'}" style="width:100%; height:100%; object-fit:cover;">
+    </div>
+    <h4 style="color:var(--royal); margin:10px 0 4px;">${name || 'Unnamed'}</h4>
+    <p style="color:var(--gold); margin:0 0 8px; font-weight:700;">${collection || ''}</p>
+    <a class="btn" href="${link || '#'}" target="_blank">View</a>
+  `;
+  return el;
+}
+
+async function fetchOpenSea(){
+  try{
+    const root = document.querySelectorAll('#nft-grid');
+    const res = await fetch(`https://api.opensea.io/api/v2/chain/ethereum/account/${walletAddress}/nfts`);
+    if(!res.ok) throw new Error('OpenSea fetch failed');
+    const data = await res.json();
+    const items = data.nfts || [];
+    items.slice(0,12).forEach(nft => {
+      const img = nft.image_url || nft.metadata?.image;
+      const name = nft.name || `${nft.collection?.name} #${nft.token_id}`;
+      const collection = nft.collection?.name || 'OpenSea';
+      const link = nft.opensea_url || `https://opensea.io/assets/${nft.asset_contract?.address}/${nft.token_id}`;
+      document.querySelectorAll('#nft-grid').forEach(g => g.appendChild(createCard({img,name,collection,link})));
+    });
+  }catch(e){
+    console.warn('OpenSea error', e);
+  }
+}
+
+async function fetchZora(){
+  try{
+    const res = await fetch(`https://api.zora.co/v1/collections/${zoraContract}/tokens`);
+    if(!res.ok) throw new Error('Zora fetch failed');
+    const data = await res.json();
+    const tokens = data.tokens || [];
+    tokens.slice(0,12).forEach(t => {
+      const img = t.token.image || '';
+      const name = t.token.name || `#${t.token.tokenId}`;
+      const collection = t.token.collection?.name || 'Zora';
+      const link = `https://zora.co/collections/${zoraContract}/${t.token.tokenId}`;
+      document.querySelectorAll('#nft-grid').forEach(g => g.appendChild(createCard({img,name,collection,link})));
+    });
+  }catch(e){
+    console.warn('Zora error', e);
+  }
+}
+
+// init
+document.addEventListener('DOMContentLoaded', () => {
+  // ensure placeholder root(s) exist
+  if(!document.getElementById('nft-grid')){
+    const grid = document.createElement('div');
+    grid.id = 'nft-grid';
+    grid.className = 'nft-grid';
+    document.body.querySelector('.container')?.appendChild(grid);
+  }
+  fetchOpenSea();
+  fetchZora();
+});
+JS
+
+  - name: Create runway page (fashion-runway.html) with continuous carousel
+    run: |
+      cat > fashion-runway.html <<'HTML'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>FX1 Onchain Fashion Runway</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script defer src="/js/runway.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>FX1 Onchain Fashion Runway</h1>
+      <nav class="site-nav">
+        <a href="/">Home</a>
+        <a href="/pages/marketplace.html">Marketplace</a>
+        <a href="/pages/mint.html">Mint</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero card">
+      <h2>Step into the FX1 Digital Wardrobe</h2>
+      <p>Live runway of NFTs. Scroll or watch the carousel glide.</p>
+    </section>
+
+    <section style="margin-top:28px;">
+      <div class="runway-strip" id="runway-strip"></div>
+    </section>
+
+    <section style="margin-top:28px;">
+      <p>CTA: <a class="btn" href="/pages/marketplace.html">Explore Marketplace</a></p>
+    </section>
+  </main>
+</body>
+</html>
+HTML
+
+  - name: Create runway script (js/runway.js)
+    run: |
+      cat > js/runway.js <<'JS'
+/* runway.js - continuous carousel effect + NFT fetch reuse */
+const runwayContract = "0x9b889aa4f3da5e96ceab76a4e2be68137a03f29d";
+const runwayWallet = "0x17af2b27d43fa612aab0698214ef2c44b08845ee";
+const runwayStrip = document.getElementById('runway-strip');
+
+function createRunwayCard({img,name,link}){
+  const c = document.createElement('div');
+  c.className = 'runway-card card';
+  c.style.minWidth = '320px';
+  c.innerHTML = `
+    <img src="${img || '/assets/placeholder.png'}" alt="${name}" style="width:100%; height:240px; object-fit:cover;">
+    <div style="padding:12px;">
+      <h4 style="color:var(--royal); margin:6px 0;">${name || 'Unnamed'}</h4>
+      <a class="btn" href="${link||'#'}" target="_blank">View</a>
+    </div>
+  `;
+  return c;
+}
+
+async function loadRunway(){
+  // simple combined fetch - Zora first
+  try{
+    const zoraRes = await fetch(`https://api.zora.co/v1/collections/${runwayContract}/tokens`);
+    const zdata = await zoraRes.json();
+    (zdata.tokens || []).slice(0,8).forEach(t => {
+      const img = t.token.image || '';
+      const name = t.token.name || `#${t.token.tokenId}`;
+      const link = `https://zora.co/collections/${runwayContract}/${t.token.tokenId}`;
+      runwayStrip.appendChild(createRunwayCard({img,name,link}));
+    });
+  }catch(e){console.warn('Zora runway fetch failed',e);}
+
+  try{
+    const osRes = await fetch(`https://api.opensea.io/api/v2/chain/ethereum/account/${runwayWallet}/nfts`);
+    const osData = await osRes.json();
+    (osData.nfts || []).slice(0,8).forEach(n => {
+      const img = n.image_url || n.metadata?.image;
+      const name = n.name || `${n.collection?.name} #${n.token_id}`;
+      const link = n.opensea_url || `https://opensea.io/assets/${n.asset_contract?.address}/${n.token_id}`;
+      runwayStrip.appendChild(createRunwayCard({img,name,link}));
+    });
+  }catch(e){console.warn('OpenSea runway fetch failed', e);}
+
+  // Duplicate children to create infinite scroll illusion
+  const items = Array.from(runwayStrip.children);
+  items.forEach(i => runwayStrip.appendChild(i.cloneNode(true)));
+
+  // animate - simple left translate loop
+  let px=0;
+  function frame(){
+    px += 0.4; // speed (increase to go faster)
+    if(px >= runwayStrip.scrollWidth/2) px = 0;
+    runwayStrip.scrollLeft = px;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+document.addEventListener('DOMContentLoaded', loadRunway);
+JS
+
+  - name: Wallet integration placeholder (js/wallet-connect.js)
+    run: |
+      cat > js/wallet-connect.js <<'JS'
+/* Minimal Wallet Connect placeholder using Web3Modal CDN and ethers.
+   For production, secure provider keys and server-side signing as needed.
+   This file assumes the html loads the CDN libs or they can be included below.
+*/
+const connectBtnId = 'connect-wallet';
+async function initWalletConnect(){
+  if(typeof window === 'undefined') return;
+  document.addEventListener('click', async (e) => {
+    if(e.target && e.target.id === connectBtnId){
+      // Use simple wallet prompt: ask user to open their wallet
+      if(window.ethereum){
+        try{
+          await window.ethereum.request({method:'eth_requestAccounts'});
+          alert('Wallet connected');
+        }catch(err){ console.warn('connect error',err); alert('Failed to connect wallet'); }
+      } else {
+        alert('No web3 wallet detected. Install MetaMask or use WalletConnect-enabled wallet.');
+      }
+    }
+  });
+}
+initWalletConnect();
+JS
+
+  - name: Add README - Roadmap & phased tasks
+    run: |
+      cat > README_ROADMAP.md <<'MD'
+FX1 Digital Hubs - Roadmap (MVP -> Phase 2 -> Advanced)
+
+MVP (this scaffolding)
+- Static site with index, marketplace, mint placeholder, fashion runway page.
+- Client-side NFT fetching from OpenSea + Zora.
+- Wallet connect placeholder (MetaMask / Wallets).
+- Styling in css/style.css.
+
+Phase 2 (recommended)
+- Implement serverless functions to proxy OpenSea/Zora, handle rate limits and metadata caching.
+- Implement true mint flow using a Base smart contract + relayer for gasless minting.
+- Listing flow: fixed-price listings and buy now.
+- User profiles and basic search/filters.
+
+Advanced (later)
+- Auctions, offers, royalties enforced on-chain.
+- Creator launchpad, analytics dashboard, DAO governance.
+- Cross-chain bridges, fractionals, fiat on-ramp.
+MD
+
+  - name: Commit scaffolding changes (optional)
+    run: |
+      if [ -d .git ]; then
+        git add -A
+        git commit -m "chore: scaffold marketplace + runway pages and nft fetchers" || true
+      fi
+
+  - name: Finalize & output URL
+    run: |
+      echo "✅ FX1 scaffolding complete"
+      echo "🌐 Live URL: https://fx1cryptos-fx1-nft-m-pqlo.bolt.host"
