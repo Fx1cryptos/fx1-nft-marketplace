@@ -1,0 +1,45 @@
+name: Deploy FX1 NFT Marketplace
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repo
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # 2. Setup Node
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+
+      # 3. Install deps
+      - name: Install Dependencies
+        run: npm install
+
+      # 4. Build project
+      - name: Build Project
+        run: npm run build
+
+      # 5. Deploy to Bolt
+      - name: Deploy to Bolt
+        run: |
+          echo "Deploying to Bolt..."
+          # Bolt auto-pulls latest from GitHub, so no special CLI needed
+          # Just ensure your repo is linked in bolt config
+
+      # 6. Deploy to Vercel
+      - name: Deploy to Vercel
+        run: npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      # 7. Deploy to Netlify
+      - name: Deploy to Netlify
+        run: npx netlify deploy --dir=dist --prod --site=${{ secrets.NETLIFY_SITE_ID }} --auth=${{ secrets.NETLIFY_AUTH_TOKEN }}
