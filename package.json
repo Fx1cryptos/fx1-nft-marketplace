@@ -17,7 +17,8 @@
   },
   "devDependencies": {
     "vite": "^5.4.8",
-    "@vercel/node": "^3.2.7"
+    "@vercel/node": "^3.2.7",
+    "@vitejs/plugin-react": "^4.3.1"
   },
   "keywords": [
     "web3",
