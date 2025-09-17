@@ -1,0 +1,57 @@
+name: Deploy FX1 NFT Marketplace
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repo
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # 2. Setup Node
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+
+      # 3. Install deps
+      - name: Install Dependencies
+        run: npm install
+
+      # 4. Build project
+      - name: Build Project
+        run: npm run build
+
+      # --- Production Deploy (main branch only) ---
+      - name: Deploy to Bolt (Production)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "Deploying to Bolt..."
+          # Bolt pulls latest from GitHub repo automatically
+
+      - name: Deploy to Vercel (Production)
+        if: github.ref == 'refs/heads/main'
+        run: npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Netlify (Production)
+        if: github.ref == 'refs/heads/main'
+        run: npx netlify deploy --dir=dist --prod --site=${{ secrets.NETLIFY_SITE_ID }} --auth=${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+      # --- Preview Deploy (PRs only) ---
+      - name: Deploy Preview to Vercel
+        if: github.event_name == 'pull_request'
+        run: npx vercel --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Preview to Netlify
+        if: github.event_name == 'pull_request'
+        run: npx netlify deploy --dir=dist --site=${{ secrets.NETLIFY_SITE_ID }} --auth=${{ secrets.NETLIFY_AUTH_TOKEN }}
