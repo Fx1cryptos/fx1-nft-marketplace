@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>FX1 Digital Hubs | Onchain Powered by Base</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="FX1 Digital Hubs — Building the Future of Onchain Creativity on Base Chain."
+    />
+    <link rel="icon" href="https://fx1digitalhubs.xyz/favicon.png" />
+
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(180deg, #001220 0%, #041e36 100%);
+        color: #fff;
+        text-align: center;
+        margin: 0;
+        padding: 60px 20px;
+      }
+
+      h1 {
+        font-size: 2.4rem;
+        margin-bottom: 0.5rem;
+        color: #4de6ff;
+      }
+
+      p {
+        color: #b3c6d4;
+        font-size: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      button {
+        background: #0052ff;
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        padding: 14px 26px;
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 10px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      button:hover {
+        background: #338aff;
+      }
+
+      #status {
+        margin-top: 25px;
+        font-size: 1rem;
+        color: #50ffb1;
+      }
+
+      .logo {
+        width: 70px;
+        margin-bottom: 20px;
+      }
+
+      footer {
+        margin-top: 50px;
+        font-size: 0.9rem;
+        color: #6e8096;
+      }
+
+      footer a {
+        color: #4de6ff;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <img
+      src="https://fx1digitalhubs.xyz/logo.png"
+      alt="FX1 Digital Hubs"
+      class="logo"
+    />
+    <h1>FX1 Digital Hubs</h1>
+    <p>Empowering creators, builders & innovators on Base Chain.</p>
+
+    <button id="signin">🔐 Sign in with Base</button>
+    <button id="pay">💸 Pay with Base</button>
+
+    <div id="status"></div>
+
+    <footer>
+      <p>
+        Built with ❤️ on <a href="https://base.org" target="_blank">Base</a> |
+        © 2025 FX1 Digital Hubs
+      </p>
+    </footer>
+
+    <!-- Load Base Account SDK via CDN -->
+    <script src="https://unpkg.com/@base-org/account/dist/base-account.min.js"></script>
+
+    <script>
+      // Initialize Base Account SDK with FX1 Digital Hubs configuration
+      const provider = window
+        .createBaseAccountSDK({
+          appName: "FX1 Digital Hubs",
+          appLogoUrl: "https://fx1digitalhubs.xyz/logo.png",
+        })
+        .getProvider();
+
+      const statusDiv = document.getElementById("status");
+      let userAddress = null;
+
+      function showStatus(message, type = "success") {
+        statusDiv.innerHTML = message;
+      }
+
+      function generateNonce() {
+        return window.crypto.randomUUID().replace(/-/g, "");
+      }
+
+      // 🧠 Sign in with Base
+      document.getElementById("signin").onclick = async () => {
+        try {
+          showStatus("🌀 Connecting to Base Account...");
+          const nonce = generateNonce();
+
+          const { accounts } = await provider.request({
+            method: "wallet_connect",
+            params: [
+              {
+                version: "1",
+                capabilities: {
+                  signInWithEthereum: {
+                    nonce,
+                    chainId: "0x2105", // Base Mainnet
+                  },
+                },
+              },
+            ],
+          });
+
+          const { address } = accounts[0];
+          const { message, signature } = accounts[0].capabilities.signInWithEthereum;
+          userAddress = address;
+
+          showStatus(
+            `✅ Signed in as: ${address.slice(0, 6)}...${address.slice(-4)}`
+          );
+          console.log("Auth Data:", { address, message, signature });
+        } catch (error) {
+          console.error("Sign-in error:", error);
+          showStatus(`❌ Sign-in failed: ${error.message}`);
+        }
+      };
+
+      // 💰 Pay with Base
+      document.getElementById("pay").onclick = async () => {
+        try {
+          showStatus("💫 Processing payment...");
+          const result = await window.base.pay({
+            amount: "5.00", // USD
+            to: "0x2211d1D0020DAEA8039E46Cf1367962070d77DA9",
+            testnet: true,
+          });
+
+          const status = await window.base.getPaymentStatus({
+            id: result.id,
+            testnet: true,
+          });
+
+          showStatus(`🎉 Payment completed! Status: ${status.status}`);
+        } catch (error) {
+          showStatus(`❌ Payment failed: ${error.message}`);
+        }
+      };
+    </script>
+  </body>
+</html>
