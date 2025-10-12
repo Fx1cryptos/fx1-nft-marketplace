@@ -1,0 +1,33 @@
+// contracts/FX1FashionNFT.sol
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/interfaces/IERC2981.sol";
+
+contract FX1FashionNFT is ERC721URIStorage, Ownable, IERC2981 {
+    uint256 public nextTokenId;
+    address public royaltyReceiver;
+    uint96 public royaltyFee; // basis points
+
+    constructor(address _royaltyReceiver, uint96 _fee) ERC721("FX1 Fashion NFT", "FX1FNFT") {
+        royaltyReceiver = _royaltyReceiver;
+        royaltyFee = _fee;
+    }
+
+    function mintNFT(address to, string memory uri) public onlyOwner {
+        _safeMint(to, nextTokenId);
+        _setTokenURI(nextTokenId, uri);
+        nextTokenId++;
+    }
+
+    function setRoyalties(address receiver, uint96 fee) external onlyOwner {
+        royaltyReceiver = receiver;
+        royaltyFee = fee;
+    }
+
+    function royaltyInfo(uint256, uint256 salePrice) external view override returns (address, uint256) {
+        return (royaltyReceiver, (salePrice * royaltyFee) / 10000);
+    }
+}
