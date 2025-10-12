@@ -1,16 +1,18 @@
-require("@nomiclabs/hardhat-ethers");
 require("dotenv").config();
+const { ethers } = require("hardhat");
 
-module.exports = {
-  solidity: "0.8.20",
-  networks: {
-    baseSepolia: {
-      url: process.env.BASE_SEPOLIA_RPC,
-      accounts: [process.env.PRIVATE_KEY]
-    },
-    baseMainnet: {
-      url: process.env.BASE_MAINNET_RPC,
-      accounts: [process.env.PRIVATE_KEY]
-    }
-  }
-};
+async function main() {
+  const [deployer] = await ethers.getSigners();
+  console.log("Deploying with wallet:", deployer.address);
+
+  const FX1FashionNFT = await ethers.getContractFactory("FX1FashionNFT");
+  const contract = await FX1FashionNFT.deploy(process.env.WALLET_ADDRESS, 500); // 5% royalties
+
+  await contract.deployed();
+  console.log("FX1FashionNFT deployed to:", contract.address);
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
