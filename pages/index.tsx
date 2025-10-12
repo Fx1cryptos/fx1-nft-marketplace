@@ -1,43 +1,49 @@
+// Main homepage with hero, NFT grid, social feed, and footer
+
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import NFTGrid from "../components/NFTGrid";
+import SocialFeed from "../components/SocialFeed";
+import Footer from "../components/Footer";
 import Image from "next/image";
 
 const FX1Background = dynamic(() => import("../components/FX1Background"), { ssr: false });
 
 export default function Home() {
   return (
-    <div className="bg-black relative min-h-screen text-white">
+    <div className="relative min-h-screen bg-gradient-to-br from-blue-900 via-black to-yellow-900 text-white overflow-x-hidden">
       <Head>
         <title>FX1 Digital Hubs Marketplace</title>
         <link rel="icon" href="/fx1-logo.png" />
-        <meta name="description" content="$FDH Token powers FX1 Digital Hubs" />
       </Head>
       <FX1Background />
-      <header className="flex items-center justify-between p-6">
+      <header className="flex items-center justify-between px-8 py-6 z-10 relative">
         <div className="flex items-center gap-4">
           <Image src="/fx1-logo.png" alt="FX1 Logo" width={48} height={48} />
-          <h1 className="text-3xl font-bold tracking-wider">FX1 DIGITAL HUBS Marketplace</h1>
+          <span className="text-2xl font-bold tracking-wider text-blue-400">FX1 DIGITAL HUBS</span>
         </div>
         <ConnectButton />
       </header>
-      <main className="max-w-3xl mx-auto mt-20 bg-gray-900 bg-opacity-80 rounded-xl p-8 shadow-2xl">
-        <h2 className="text-2xl font-bold mb-4">$FDH Token</h2>
-        <p className="mb-2">Powering the Future of Digital Fashion, Art, and Culture onchain</p>
-        <p className="mb-6 text-lg text-purple-300">
-          $FDH is the utility and community token at the core of the FX1 DIGITAL HUBS ecosystem — a growing platform dedicated to digital creativity, NFT fashion, and onchain culture.<br />
-          <br />
-          As a holder of $FDH, you’re not just supporting a project — you’re unlocking early access to a movement.
-        </p>
-        <hr className="my-6 border-purple-500" />
-        <h3 className="text-xl font-semibold mb-2">Why $FDH Matters</h3>
-        <ul className="list-disc pl-6 space-y-2">
-          <li>🔑 <span className="font-bold">Access:</span> Entry to exclusive FX1 experiences — NFT drops, fashion collectibles, interactive gaming, creative tools.</li>
-          <li>🎨 <span className="font-bold">Empowerment:</span> Support emerging digital artists and creators, funding a culture-first vision of Web3.</li>
-          <li>🧬 <span className="font-bold">Utility:</span> Earn rewards, forge digital wardrobes, play click-to-earn games, and onchain challenges powered by $FDH.</li>
-          <li>📦 <span className="font-bold">Future-Proof:</span> Airdrops, early releases, evolving perks for $FDH holders.</li>
-        </ul>
+      <main className="max-w-6xl mx-auto px-8 z-10 relative">
+        <section className="text-center py-16">
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-blue-400 via-white to-yellow-400 bg-clip-text text-transparent animate-pulse">
+            Styling the Blockchain with NFT Fashion & Onchain Identity
+          </h1>
+          <p className="text-xl mb-8 text-blue-100">Powered by FX1 Digital Hubs Token ($FDH) on Base</p>
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            <a href="https://zora.co/collections/fx1_hubs" target="_blank" className="btn-primary">🔗 Explore NFTs (Zora)</a>
+            <a href="https://app.rainbow.me/swap" target="_blank" className="btn-secondary">💰 Buy $FDH on Base</a>
+          </div>
+        </section>
+        <section className="py-8">
+          <NFTGrid />
+        </section>
+        <section className="py-8">
+          <SocialFeed />
+        </section>
       </main>
+      <Footer />
     </div>
   );
 }
