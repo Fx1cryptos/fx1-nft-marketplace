@@ -1,47 +1,40 @@
 {
-  "name": "fx1-nft-marketplace",
+  "name": "fx1-hubs-miniapp",
   "version": "1.0.0",
-  "description": "FX1 NFT Marketplace — a full-stack Node.js app connecting NFT Fashion, Surreal Art, and $FDH on Base Chain.",
-  "private": true,
-  "type": "module",
+  "description": "FX1 Digital Hubs — a Web3 MiniApp built on Base Chain featuring NFT Marketplace, Token Dashboard, and AI Creator Hub powered by $FDH.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "build": "react-scripts build"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@thirdweb-dev/react": "^4.6.0",
-    "@thirdweb-dev/sdk": "^4.6.0",
-    "alchemy-sdk": "^3.3.0",
-    "axios": "^1.6.8",
-    "cors": "^2.8.5",
+    "@thirdweb-dev/react": "^4.0.0",
+    "@thirdweb-dev/sdk": "^4.0.0",
+    "alchemy-sdk": "^3.0.0",
+    "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "path": "^0.12.7",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.23.1"
+    "next": "14.2.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0",
-    "react-scripts": "5.0.1"
+    "eslint": "^9.9.0",
+    "eslint-config-next": "14.2.5"
   },
   "keywords": [
     "FX1",
-    "NFT",
-    "Marketplace",
-    "BaseChain",
-    "Zora",
-    "$FDH",
-    "FX1DigitalHubs",
+    "Digital Hubs",
+    "NFT Marketplace",
+    "Base Chain",
+    "FDH Token",
     "Web3",
-    "Nodejs"
+    "Next.js",
+    "Thirdweb",
+    "Alchemy"
   ],
   "author": "FX1 Digital Hubs",
   "license": "MIT"
-}"dependencies": {
-  "next": "latest",
-  "react": "latest",
-  "react-dom": "latest"
 }
