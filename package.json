@@ -40,4 +40,8 @@
   ],
   "author": "FX1 Digital Hubs",
   "license": "MIT"
+}"dependencies": {
+  "next": "latest",
+  "react": "latest",
+  "react-dom": "latest"
 }
