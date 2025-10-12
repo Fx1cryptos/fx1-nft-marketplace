@@ -1,18 +1,43 @@
 {
   "name": "fx1-nft-marketplace",
   "version": "1.0.0",
+  "description": "FX1 NFT Marketplace — a full-stack Node.js app connecting NFT Fashion, Surreal Art, and $FDH on Base Chain.",
   "private": true,
+  "type": "module",
+  "main": "server.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview --port 4173"
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "react-scripts build"
   },
   "dependencies": {
+    "@thirdweb-dev/react": "^4.6.0",
+    "@thirdweb-dev/sdk": "^4.6.0",
+    "alchemy-sdk": "^3.3.0",
+    "axios": "^1.6.8",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "path": "^0.12.7",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.23.1"
   },
   "devDependencies": {
-    "vite": "^5.4.0",
-    "@vitejs/plugin-react": "^4.3.1"
-  }
+    "nodemon": "^3.1.0",
+    "react-scripts": "5.0.1"
+  },
+  "keywords": [
+    "FX1",
+    "NFT",
+    "Marketplace",
+    "BaseChain",
+    "Zora",
+    "$FDH",
+    "FX1DigitalHubs",
+    "Web3",
+    "Nodejs"
+  ],
+  "author": "FX1 Digital Hubs",
+  "license": "MIT"
 }
