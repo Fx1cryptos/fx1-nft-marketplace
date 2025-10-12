@@ -1,0 +1,31 @@
+// Displays NFTs from Zora and OpenSea in 3D rotating cards
+
+import { useEffect, useState } from "react";
+import RotatingNFTCard from "./RotatingNFTCard";
+
+export default function NFTGrid() {
+  const [nfts, setNFTs] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchNFTs() {
+      // Zora fetch
+      const zoraRes = await fetch("/api/nfts/zora?address=fx1_hubs");
+      const zoraNFTs = await zoraRes.json();
+      // OpenSea fetch
+      const osRes = await fetch("/api/nfts/opensea?owner=Fx1cryptos");
+      const osNFTs = await osRes.json();
+      // Combine and randomize
+      const allNFTs = [...zoraNFTs, ...osNFTs].sort(() => Math.random() - 0.5);
+      setNFTs(allNFTs.slice(0, 6)); // Show top 6
+    }
+    fetchNFTs();
+  }, []);
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center items-center">
+      {nfts.map((nft, idx) => (
+        <RotatingNFTCard key={idx} imageUrl={nft.image_url || nft.media_url} title={nft.name} />
+      ))}
+    </div>
+  );
+}
